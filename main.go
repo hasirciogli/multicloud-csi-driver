@@ -3,8 +3,9 @@ package main
 import (
 	"log"
 	"sync"
+
 	"github.com/hasirciogli/multicloud-csi-driver/controller"
-    "github.com/hasirciogli/multicloud-csi-driver/node"
+	"github.com/hasirciogli/multicloud-csi-driver/node"
 )
 
 func main() {

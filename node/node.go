@@ -2,15 +2,15 @@ package node
 
 import (
 	"context"
-	"github.com/container-storage-interface/spec/lib/go/csi"
-	"google.golang.org/grpc"
 	"log"
 	"net"
+
+	"github.com/container-storage-interface/spec/lib/go/csi"
+	"google.golang.org/grpc"
 )
 
 type NodeDriver struct {
 	csi.UnimplementedNodeServer
-	// Other fields...
 }
 
 // NodeStageVolume prepares the volume for mounting by the node
@@ -52,7 +52,16 @@ func (d *NodeDriver) NodeExpandVolume(ctx context.Context, req *csi.NodeExpandVo
 // NodeGetInfo gets the node info
 func (d *NodeDriver) NodeGetInfo(ctx context.Context, req *csi.NodeGetInfoRequest) (*csi.NodeGetInfoResponse, error) {
 	// Implementation to get the node info
-	return &csi.NodeGetInfoResponse{}, nil
+	return &csi.NodeGetInfoResponse{
+		NodeId:            "node-id-1-test",
+		MaxVolumesPerNode: 10,
+		AccessibleTopology: &csi.Topology{
+			Segments: map[string]string{
+				"region": "us-east-1",
+				"zone":   "us-east-1a",
+			},
+		},
+	}, nil
 }
 
 // get capabilities function
