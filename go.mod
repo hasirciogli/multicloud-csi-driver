@@ -1,4 +1,4 @@
-module multicloud-custom-csi-driver
+module github.com/hasirciogli/multicloud-csi-driver
 
 go 1.23.4
 

@@ -1,43 +1,32 @@
 package main
 
 import (
-    "github.com/container-storage-interface/spec/lib/go/csi"
-    "google.golang.org/grpc"
-    "log"
-    "net"
-    "context"
-	"github.com/hasirciogli/multicloud-csi-driver/utils"
+	"log"
+	"sync"
+	"github.com/hasirciogli/multicloud-csi-driver/controller"
+    "github.com/hasirciogli/multicloud-csi-driver/node"
 )
 
 func main() {
-	utils.LogError(nil)
+	var wg sync.WaitGroup
+	wg.Add(2) // 2 server başlatacağımız için
+
+	// Controller Server'ı başlat
+	go func() {
+		defer wg.Done()
+		if err := controller.StartControllerServer(); err != nil {
+			log.Fatalf("Failed to start controller server: %v", err)
+		}
+	}()
+
+	// Node Server'ı başlat
+	go func() {
+		defer wg.Done()
+		if err := node.StartNodeServer(); err != nil {
+			log.Fatalf("Failed to start node server: %v", err)
+		}
+	}()
+
+	// Her iki server'ı da bekle
+	wg.Wait()
 }
-
-// type Driver struct {
-//     csi.UnimplementedControllerServer
-//     csi.UnimplementedNodeServer
-//     // Other fields...
-// }
-
-// func (d *Driver) NodeGetInfo(ctx context.Context, req *csi.NodeGetInfoRequest) (*csi.NodeGetInfoResponse, error) {
-// 	var nodeId string := req.GetNodeID()
-//     return &csi.NodeGetInfoResponse{
-//         NodeId: nodeId,
-//     }, nil
-// }
-
-// func main() {
-//     listener, err := net.Listen("tcp", ":50051")
-//     if err != nil {
-//         log.Fatalf("Failed to listen: %v", err)
-//     }
-
-//     s := grpc.NewServer()
-//     csi.RegisterControllerServer(s, &Driver{})
-//     csi.RegisterNodeServer(s, &Driver{})
-
-//     log.Println("Starting CSI driver server...")
-//     if err := s.Serve(listener); err != nil {
-//         log.Fatalf("Failed to serve: %v", err)
-//     }
-// } 

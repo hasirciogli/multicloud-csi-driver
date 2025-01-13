@@ -1,4 +1,4 @@
-package main
+package node
 
 import (
 	"context"
@@ -49,17 +49,32 @@ func (d *NodeDriver) NodeExpandVolume(ctx context.Context, req *csi.NodeExpandVo
 	return &csi.NodeExpandVolumeResponse{}, nil
 }
 
-func main() {
+// NodeGetInfo gets the node info
+func (d *NodeDriver) NodeGetInfo(ctx context.Context, req *csi.NodeGetInfoRequest) (*csi.NodeGetInfoResponse, error) {
+	// Implementation to get the node info
+	return &csi.NodeGetInfoResponse{}, nil
+}
+
+// get capabilities function
+func (d *NodeDriver) NodeGetCapabilities(ctx context.Context, req *csi.NodeGetCapabilitiesRequest) (*csi.NodeGetCapabilitiesResponse, error) {
+	// Implementation to get the capabilities
+	return &csi.NodeGetCapabilitiesResponse{}, nil
+}
+
+// StartNodeServer Node Server'ı başlatır
+func StartNodeServer() error {
 	listener, err := net.Listen("tcp", ":50052")
 	if err != nil {
-		log.Fatalf("Failed to listen: %v", err)
+		return err
 	}
 
 	s := grpc.NewServer()
 	csi.RegisterNodeServer(s, &NodeDriver{})
 
-	log.Println("Starting CSI node server...")
+	log.Println("Starting CSI node server on port 50052...")
 	if err := s.Serve(listener); err != nil {
-		log.Fatalf("Failed to serve: %v", err)
+		return err
 	}
+
+	return nil
 }

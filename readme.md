@@ -1,3 +1,7 @@
+# CURRENTLY IN DEVELOPMENT STAGE
+## THIS PROJECT IS NOT READY FOR PRODUCTION
+### THIS IS A DEMO PROJECT FOR MULTI-CLOUD STORAGE
+
 # Project Setup and Running
 
 This project is a Node Driver implementation for the Container Storage Interface (CSI). You can set up and run the project by following the steps below.
@@ -16,7 +20,7 @@ This project is a Node Driver implementation for the Container Storage Interface
 
 2. **Initialize the Go Module:**
    ```bash
-   go mod init multicloud-custom-csi-driver
+   go mod init github.com/hasirciogli/multicloud-csi-driver
    ```
 
 3. **Install Dependencies:**
